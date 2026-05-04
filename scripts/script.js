@@ -1,4 +1,13 @@
 console.log("Script is connected");
+const showLoader =() =>{
+    document.getElementById("loader").classList.remove('hidden');
+    document.getElementById("videos-container").classList.add('hidden');
+}
+const hideLoader =() =>{
+    document.getElementById("loader").classList.add('hidden');
+    document.getElementById("videos-container").classList.remove('hidden');
+}
+
 function removeActiveClass () {
     const activeButtons = document.getElementsByClassName('active');
     for (let btn of activeButtons) {
@@ -9,20 +18,23 @@ function removeActiveClass () {
 function loadCategories() {
   fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
     .then((res) => res.json())
-    .then((data) => displayCategories(data.categories));
+    .then((data) => displayCategories(data.categories))
 }
 
-const loadVideos = () => {
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+const loadVideos = (searchText = "") => {
+    showLoader();
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
     .then((res) => res.json())
     .then((data) => {
         removeActiveClass();
         document.getElementById('btn-all').classList.add("active");
         displayVideos(data.videos)
+        
     });
 };
 
 const loadCAtegoriesVideos = (id) => {
+    showLoader();
   const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
   fetch(url)
     .then((res) => res.json())
@@ -33,6 +45,32 @@ const loadCAtegoriesVideos = (id) => {
         displayVideos(data.category)
     });
 };
+
+const loadVideoDetails = (video_id) => {
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${video_id}`;
+    fetch(url)
+    .then((res)=>res.json())
+    .then((data)=>displayVideoDetails(data.video))
+
+}
+
+const displayVideoDetails = (video) =>{
+    document.getElementById('video_details').showModal();
+    const detailsContainer = document.getElementById('details-container');
+    detailsContainer.innerHTML = `
+    <div class="card bg-base-100 image-full shadow-sm">
+  <figure>
+    <img class="w-full object-cover"
+      src="${video.thumbnail}"
+      alt="Shoes" />
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title text-grey-600">${video.title}</h2>
+    <p class="text-grey-600">${video.description}</p>
+  </div>
+</div>
+    `
+}
 
 // {category_id: '1001', category: 'Music'}
 
@@ -47,29 +85,11 @@ function displayCategories(categories) {
   }
 }
 
-// {
-//     "category_id": "1001",
-//     "video_id": "aaag",
-//     "thumbnail": "https://i.ibb.co/DRxB1Wm/sunris.jpg",
-//     "title": "Sunrise Reverie",
-//     "authors": [
-//         {
-//             "profile_picture": "https://i.ibb.co/yQFJ42h/ava.jpg",
-//             "profile_name": "Ava Johnson",
-//             "verified": false
-//         }
-//     ],
-//     "others": {
-//         "views": "1.1K",
-//         "posted_date": "16950"
-//     },
-//     "description": "'Sunrise Reverie' by Ava Johnson takes listeners on a serene journey through tranquil melodies and soft harmonies. With 1.1K views, this track is perfect for morning relaxation or an evening wind-down. Ava's heartfelt lyrics and soothing voice create a sense of peace, making it a go-to for fans seeking calm and inspiration in their musical choices."
-// }
 
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("videos-container");
   videoContainer.innerHTML = "";
-
+    
   if (videos.length === 0) {
     videoContainer.innerHTML = `
             <div
@@ -81,11 +101,11 @@ const displayVideos = (videos) => {
         </h2>
       </div>
         `;
+        hideLoader();
     return;
   }
 
   videos.forEach((video) => {
-    console.log(video);
 
     const videoCard = document.createElement("div");
     videoCard.innerHTML = `
@@ -113,21 +133,30 @@ const displayVideos = (videos) => {
             </div>
           </div>
           <div class="intro">
-            <h2>Midnight Serenade</h2>
+            <h2>${video.title}</h2>
             <p class="text-sm text-gray-400 flex gap-1">
               ${video.authors[0].profile_name}
-              <img
+              ${video.authors[0].verified === true ? `<img
                 class="w-5 h-5"
                 src="https://img.icons8.com/?size=48&id=QMxOVe0B9VzG&format=png"
-              />
+              />` : ''}
+              
             </p>
             <p class="text-sm text-gray-400">${video.others.views}</p>
           </div>
         </div>
+        <button onclick="loadVideoDetails('${video.video_id}')"class="btn btn-block">Show Details</button>
       </div>
         `;
     videoContainer.append(videoCard);
+    hideLoader();
   });
 };
+
+
+document.getElementById('search-input').addEventListener("keyup", (e)=>{
+    const input= e.target.value;
+    loadVideos(input);
+})
 
 loadCategories();

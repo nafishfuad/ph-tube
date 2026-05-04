@@ -10,11 +10,11 @@
       type="text/css"
     />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style> 
-        .active{
-            background: #ff1f3d;
-            color: white;
-        }
+    <style>
+      .active {
+        background: #ff1f3d;
+        color: white;
+      }
     </style>
   </head>
   <body>
@@ -27,20 +27,37 @@
           <img class="w-44" src="assets/Logo.png" />
         </div>
         <div class="search">
-          <button class="btn text-lg bg-[#25252520] rounded-md">
-            Sort By View
-          </button>
+          <label class="input">
+            <svg
+              class="h-[1em] opacity-50"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <g
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke-width="2.5"
+                fill="none"
+                stroke="currentColor"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </g>
+            </svg>
+            <input id="search-input" type="search" required placeholder="Search" />
+          </label>
         </div>
         <div class="blogs">
           <button class="btn text-lg bg-[#FF1F3D] text-white rounded-md p-5">
-            Blogs
+            Sort By View
           </button>
         </div>
       </nav>
     </header>
     <nav id="categories-container" class="flex py-5 justify-center gap-5">
       <div>
-        <button id="btn-all"
+        <button
+          id="btn-all"
           onclick="loadVideos()"
           class="btn text-lg btn-sm rounded-md p-5"
         >
@@ -49,12 +66,26 @@
       </div>
     </nav>
     <!-- Main Section -->
+     <section id="loader" class="text-center py-10 hidden">
+        <span class="loading loading-dots loading-xl"></span>
+     </section>
     <section
       id="videos-container"
       class="w-11/12 mx-auto grid grid-cols-4 gap-5"
-    >
-      
-    </section>
+    ></section>
+
+    <!-- Open the modal using ID.showModal() method -->
+    <dialog id="video_details" class="modal">
+      <div class="modal-box">
+        <div id="details-container"></div>
+        <div class="modal-action">
+          <form method="dialog">
+            <!-- if there is a button in form, it will close the modal -->
+            <button class="btn">Close</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
     <!-- scripts -->
     <script src="scripts/script.js"></script>
   </body>
