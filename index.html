@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PH Tube</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style> 
+        .active{
+            background: #ff1f3d;
+            color: white;
+        }
+    </style>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header>
+      <nav
+        class="w-11/12 mx-auto flex justify-between border-b-2 border-[#17171720] py-6 mt-3"
+      >
+        <div class="logo">
+          <img class="w-44" src="assets/Logo.png" />
+        </div>
+        <div class="search">
+          <button class="btn text-lg bg-[#25252520] rounded-md">
+            Sort By View
+          </button>
+        </div>
+        <div class="blogs">
+          <button class="btn text-lg bg-[#FF1F3D] text-white rounded-md p-5">
+            Blogs
+          </button>
+        </div>
+      </nav>
+    </header>
+    <nav id="categories-container" class="flex py-5 justify-center gap-5">
+      <div>
+        <button id="btn-all"
+          onclick="loadVideos()"
+          class="btn text-lg btn-sm rounded-md p-5"
+        >
+          All
+        </button>
+      </div>
+    </nav>
+    <!-- Main Section -->
+    <section
+      id="videos-container"
+      class="w-11/12 mx-auto grid grid-cols-4 gap-5"
+    >
+      
+    </section>
+    <!-- scripts -->
+    <script src="scripts/script.js"></script>
+  </body>
+</html>
